@@ -1,0 +1,10 @@
+plugins {
+    id "com.github.node-gradle.node" version "7.1.0"
+}
+
+// プロジェクトローカルに Node.js をダウンロードする
+node {
+    download.set(true)
+    version.set("20.11.1")
+}
+
