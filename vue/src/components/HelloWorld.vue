@@ -1,13 +1,27 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from "vue";
+import axios from "axios";
 
-defineProps<{ msg: string }>()
+defineProps<{ msg: string }>();
 
-const count = ref(0)
+const count = ref(0);
+const msg2 = ref("");
+
+onMounted(() => {
+  axios
+    .get("/api/hello")
+    .then((response) => {
+      msg2.value = response.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+});
 </script>
 
 <template>
   <h1>{{ msg }}</h1>
+  <h2>{{ msg2 }}</h2>
 
   <div class="card">
     <button type="button" @click="count++">count is {{ count }}</button>
