@@ -1,3 +1,24 @@
 spring:
   resources:
     static-locations: classpath:/static/
+
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      username: root
+      password: password
+      database: HouseholdAccountBookDB
+      authentication-database: admin
+      auto-index-creation: true
+
+  # LOGレベルの設定（開発後はINFOに変更）
+  logging:
+    level:
+      org.springframework.security: DEBUG
+
+  # その他の設定
+  server:
+    port: 8080
+    servlet:
+      context-path: /api
