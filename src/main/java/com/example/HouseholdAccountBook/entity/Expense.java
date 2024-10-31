@@ -1,5 +1,7 @@
 package com.example.HouseholdAccountBook.entity;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,6 +23,7 @@ public class Expense {
     private String userId; // ユーザーID
     private String categoryId; // カテゴリーID
     private String month; // 経費月
+    @NotNull(message = "金額を入力してください。")
     private int amount; // 金額
     private String note; // 備考
     @CreatedDate
