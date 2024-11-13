@@ -20,5 +20,3 @@ spring:
   # その他の設定
   server:
     port: 8080
-    servlet:
-      context-path: /api
