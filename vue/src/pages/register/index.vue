@@ -10,6 +10,14 @@
       <q-page>
         <q-form @submit.prevent="submitForm" class="q-pa-md">
           <q-input
+            v-model="name"
+            label="名前"
+            type="text"
+            aria-required="true"
+            autofocus
+            outlined
+          />
+          <q-input
             v-model="email"
             label="メールアドレス"
             type="email"
@@ -42,16 +50,19 @@ import registration from "../../components/domains/registration";
 export default defineComponent({
   name: "App",
   setup() {
+    const name = ref("");
     const email = ref("");
     const password = ref("");
 
     const submitForm = () => {
-      if (email.value && password.value) {
+      if (name.value && email.value && password.value) {
         console.log("会員登録情報:", {
+          name: name.value,
           email: email.value,
           password: password.value,
         });
         const registration: registration = () => {
+          name;
           email;
           password;
         };
@@ -63,7 +74,7 @@ export default defineComponent({
       }
     };
 
-    return { email, password, submitForm };
+    return { name, email, password, submitForm };
   },
 });
 </script>
