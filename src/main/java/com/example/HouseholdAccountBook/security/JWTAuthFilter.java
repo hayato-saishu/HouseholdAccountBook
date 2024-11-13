@@ -1,72 +1,77 @@
 package com.example.HouseholdAccountBook.security;
 
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.example.HouseholdAccountBook.dto.LoginRequest;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.servlet.ServletInputStream;
+import com.example.HouseholdAccountBook.util.JWTUtils;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
-import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
 
-public class JWTAuthFilter extends UsernamePasswordAuthenticationFilter {
+@Component
+public class JWTAuthFilter extends OncePerRequestFilter {
 
-    private final AuthenticationManager authenticationManager;
-    private final long EXPIRATION_TIME = 1000 * 60 * 24 * 7;
+    @Autowired
+    private final JWTUtils jwtUtils;
 
-    public JWTAuthFilter(AuthenticationManager authenticationManager) {
+    private final UserDetailsService userDetailsService;
 
-        // AuthenticationManagerの設定
-        this.authenticationManager = authenticationManager;
-
-        // ログインPATHの設定
-        setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/api/auth/login", "POST"));
-        // ログイン用パラメータの設定
-        setUsernameParameter("email");
-        setPasswordParameter("password");
-
-        // ログイン成功時はtokenを発行してレスポンスにセットする
-        this.setAuthenticationSuccessHandler((request, response, ex) -> {
-            // トークンの作成
-            String token = JWT.create()
-                    .withIssuer("https:HouseholdAccountBook.com")
-                    .withClaim("email", ex.getName())
-                    .withExpiresAt(new Date(EXPIRATION_TIME))
-                    .sign(Algorithm.HMAC256("secret"));
-
-            response.setHeader("X-AUTH-TOKEN", token);
-            response.setStatus(200);
-        });
-
-        // ログイン失敗時
-        this.setAuthenticationFailureHandler((request, response, ex) -> {
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        });
-
+    //Constructor
+    public JWTAuthFilter(JWTUtils jwtUtils, UserDetailsService userDetailsService) {
+        this.jwtUtils = jwtUtils;
+        this.userDetailsService = userDetailsService;
     }
 
-    @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
-        try {
-            ServletInputStream stream = request.getInputStream();
-            // リクエストのJSONの値をログインリクエストにマッピング
-            LoginRequest loginRequest = new ObjectMapper().readValue(request.getInputStream(), LoginRequest.class);
-            return this.authenticationManager.authenticate(
-                    new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword(), new ArrayList<>())
+    // This method is executed for every request intercepted by the filter.
+    //And, it extract the token from the request header and validate the token.
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+
+        // HTTPリクエストからTokenを取得
+        String token = getTokenFromRequest(request);
+
+        // Validate Token
+        if (StringUtils.hasText(token) && jwtUtils.validateToken(token)) {
+            // get username from token
+            String username = jwtUtils.getEmail(token);
+
+            UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                    userDetails,
+                    null,
+                    userDetails.getAuthorities()
             );
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+
+            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }
+
+        filterChain.doFilter(request, response);
+    }
+
+    // Extract the token
+    private String getTokenFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+
+        return null;
     }
 }
