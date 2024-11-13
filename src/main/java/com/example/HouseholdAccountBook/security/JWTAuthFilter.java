@@ -17,10 +17,12 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class JWTAuthFilter extends UsernamePasswordAuthenticationFilter {
 
     private final AuthenticationManager authenticationManager;
+    private final long EXPIRATION_TIME = 1000 * 60 * 24 * 7;
 
     public JWTAuthFilter(AuthenticationManager authenticationManager) {
 
@@ -36,7 +38,11 @@ public class JWTAuthFilter extends UsernamePasswordAuthenticationFilter {
         // ログイン成功時はtokenを発行してレスポンスにセットする
         this.setAuthenticationSuccessHandler((request, response, ex) -> {
             // トークンの作成
-            String token = JWT.create().withIssuer("https:HouseholdAccountBook.com").withClaim("email", ex.getName()).sign(Algorithm.HMAC256("secret"));
+            String token = JWT.create()
+                    .withIssuer("https:HouseholdAccountBook.com")
+                    .withClaim("email", ex.getName())
+                    .withExpiresAt(new Date(EXPIRATION_TIME))
+                    .sign(Algorithm.HMAC256("secret"));
 
             response.setHeader("X-AUTH-TOKEN", token);
             response.setStatus(200);
