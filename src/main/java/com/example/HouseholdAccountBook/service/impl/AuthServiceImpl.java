@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -41,8 +40,6 @@ public class AuthServiceImpl {
                 loginRequest.getEmail(),
                 loginRequest.getPassword())
         );
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
         return jwtUtils.generateToken(authentication);
     }
 }

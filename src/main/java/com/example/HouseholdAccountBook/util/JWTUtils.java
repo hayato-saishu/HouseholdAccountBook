@@ -6,7 +6,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
@@ -14,11 +13,11 @@ import java.util.Base64;
 import java.util.Date;
 
 @Service
-public class JWTUtils extends UsernamePasswordAuthenticationFilter {
+public class JWTUtils {
 
     // Secret Keyと有効期限を定数化
     private static final String SECRET_KEY = generateKey();
-    private static final long EXPIRATION_TIME = 1000 * 60 * 24 * 7; // 7日間
+    private static final long EXPIRATION_TIME = 1000 * 60 * 24 * 7; // for 7 days
 
     // JWTトークンを生成
     public String generateToken(Authentication authentication) {
@@ -56,9 +55,9 @@ public class JWTUtils extends UsernamePasswordAuthenticationFilter {
         // アルゴリズムを使用してトークンを検証
         Algorithm algorithm = Algorithm.HMAC256(SECRET_KEY);
         JWTVerifier verifier = JWT.require(algorithm).build();
-        DecodedJWT jwt = verifier.verify(token);
+        DecodedJWT decodedJWT = verifier.verify(token);
 
-        return jwt.getClaim("email").asString();  // 指定されたクレームを取得
+        return decodedJWT.getClaim("email").asString();  // 指定されたクレームを取得
     }
 
     // トークンの検証（有効期限も確認）
