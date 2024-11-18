@@ -1,8 +1,9 @@
+<script setup lang="ts">
+import Common from "./components/bases/Common.vue";
+</script>
+
 <template>
-  <p>
-    <strong>Current route path:</strong> {{ $route.fullPath }}
-  </p>
-  <main>
-    <RouterView />
-  </main>
+  <div>
+    <Common />
+  </div>
 </template>

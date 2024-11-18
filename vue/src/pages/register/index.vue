@@ -1,40 +1,57 @@
 <template>
   <q-layout view="hHh Lpr lFf">
-    <q-header elevated>
-      <q-toolbar>
-        <q-toolbar-title>会員登録</q-toolbar-title>
-      </q-toolbar>
-    </q-header>
-
     <q-page-container>
       <q-page>
         <q-form @submit.prevent="submitForm" class="q-pa-md">
           <q-input
+            class="q-mt-sm"
             v-model="name"
+            dark
             label="名前"
             type="text"
+            :rules="[(val) => !!val]"
             aria-required="true"
-            autofocus
             outlined
+            error-message="名前は必須です。"
           />
           <q-input
+            class="q-mt-sm"
             v-model="email"
+            dark
             label="メールアドレス"
             type="email"
-            :rules="['email']"
+            :rules="[
+              (val) => !!val || 'メールアドレスは必須です。',
+              (val) =>
+                /.+@.+\..+/.test(val) ||
+                '正しいメールアドレスを入力してください。',
+            ]"
             aria-required="true"
-            autofocus
             outlined
           />
           <q-input
+            class="q-mt-sm"
             v-model="password"
+            dark
             label="パスワード"
             type="password"
+            :rules="[
+              (val) => !!val || 'パスワードは必須です。',
+              (val) =>
+                val.length > 5 || 'パスワードは6文字以上で入力してください。',
+            ]"
             aria-required="true"
             outlined
           />
-          <div class="q-mt-md">
-            <q-btn label="登録" color="primary" type="submit" />
+          <div class="q-mt-sm">
+            <q-btn
+              label="登録する"
+              style="width: 100%"
+              icon-right="mdi-account-plus"
+              color="primary"
+              type="submit"
+              to="/login"
+            />
           </div>
         </q-form>
       </q-page>
@@ -81,7 +98,7 @@ export default defineComponent({
 
 <style scoped>
 .q-page {
-  max-width: 400px;
+  max-width: 800px;
   margin: auto;
 }
 </style>
