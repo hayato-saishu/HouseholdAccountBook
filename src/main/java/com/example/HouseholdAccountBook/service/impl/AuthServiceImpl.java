@@ -1,10 +1,11 @@
 package com.example.HouseholdAccountBook.service.impl;
 
-import com.example.HouseholdAccountBook.Exception.OurException;
 import com.example.HouseholdAccountBook.dto.LoginRequest;
+import com.example.HouseholdAccountBook.dto.Response;
 import com.example.HouseholdAccountBook.entity.User;
 import com.example.HouseholdAccountBook.repository.UserRepository;
 import com.example.HouseholdAccountBook.util.JWTUtils;
+import com.example.HouseholdAccountBook.util.MapperToDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,14 +26,22 @@ public class AuthServiceImpl {
     @Autowired
     private JWTUtils jwtUtils;
 
-    public User registerUser(@Valid User user) {
+    public Response registerUser(@Valid User user) {
+        Response response = new Response();
 
         if (userRepository.existsByEmail(user.getEmail())) {
-            throw new OurException("メールアドレスが既に使われています。");
+            response.setStatusCode(403);
+            response.setMessage("メールアドレスが既に使われています。");
+            return response;
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        return userRepository.save(user);
+        MapperToDto mapperToDto = new MapperToDto();
+        response.setStatusCode(200);
+        response.setMessage("アカウントを作成しました。");
+        response.setUserDto(mapperToDto.mapperToUserDto(user));
+
+        return response;
     }
 
     public String login(LoginRequest loginRequest) {

@@ -3,9 +3,10 @@ package com.example.HouseholdAccountBook.dto;
 import lombok.Data;
 
 @Data
-public class AuthResponseDto {
+public class LoginResponseDto {
     private String accessToken;
-    public AuthResponseDto(String accessToken) {
+
+    public LoginResponseDto(String accessToken) {
         this.accessToken = accessToken;
     }
 }

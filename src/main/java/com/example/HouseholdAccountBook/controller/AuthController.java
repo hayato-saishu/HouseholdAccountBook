@@ -1,7 +1,8 @@
 package com.example.HouseholdAccountBook.controller;
 
-import com.example.HouseholdAccountBook.dto.AuthResponseDto;
+import com.example.HouseholdAccountBook.dto.LoginResponseDto;
 import com.example.HouseholdAccountBook.dto.LoginRequest;
+import com.example.HouseholdAccountBook.dto.Response;
 import com.example.HouseholdAccountBook.entity.User;
 import com.example.HouseholdAccountBook.service.impl.AuthServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,19 +19,17 @@ public class AuthController {
     @Autowired
     private AuthServiceImpl authService;
 
-    @PostMapping("/register")
-    public ResponseEntity<User> register(@RequestBody User user) {
+    @PostMapping("/signUp")
+    public Response register(@RequestBody User user) {
 
-        return ResponseEntity.ok(authService.registerUser(user));
+        return authService.registerUser(user);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponseDto> login(@RequestBody LoginRequest loginRequest) {
-        // token取得
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequest loginRequest) {
+        // ログイン処理
         String token = authService.login(loginRequest);
 
-        AuthResponseDto authResponseDto = new AuthResponseDto(token);
-
-        return ResponseEntity.ok(authResponseDto);
+        return ResponseEntity.ok(new LoginResponseDto(token));
     }
 }
