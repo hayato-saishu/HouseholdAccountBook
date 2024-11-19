@@ -5,9 +5,10 @@ import LoginPage from '../pages/login/index.vue'
 import TopPage from '../pages/top/index.vue'
 
 const routes = [
-  { path: '/', component: TopPage },
+  { path: '/', redirect: '/login'},
   { path: '/register', component: RegisterPage },
   { path: '/login', component: LoginPage },
+  { path: '/top', component: TopPage },
 ]
 
 const router = createRouter({

@@ -2,6 +2,7 @@
   <q-layout view="hHh Lpr lFf">
     <q-page-container>
       <q-page>
+        <h2>会員登録</h2>
         <q-form @submit.prevent="submitForm" class="q-pa-md">
           <q-input
             class="q-mt-sm"
@@ -9,7 +10,7 @@
             dark
             label="名前"
             type="text"
-            :rules="[(val) => !!val]"
+            :rules="nameRules"
             aria-required="true"
             outlined
             error-message="名前は必須です。"
@@ -20,12 +21,7 @@
             dark
             label="メールアドレス"
             type="email"
-            :rules="[
-              (val) => !!val || 'メールアドレスは必須です。',
-              (val) =>
-                /.+@.+\..+/.test(val) ||
-                '正しいメールアドレスを入力してください。',
-            ]"
+            :rules="emailRules"
             aria-required="true"
             outlined
           />
@@ -35,11 +31,7 @@
             dark
             label="パスワード"
             type="password"
-            :rules="[
-              (val) => !!val || 'パスワードは必須です。',
-              (val) =>
-                val.length > 5 || 'パスワードは6文字以上で入力してください。',
-            ]"
+            :rules="passwordRules"
             aria-required="true"
             outlined
           />
@@ -50,7 +42,6 @@
               icon-right="mdi-account-plus"
               color="primary"
               type="submit"
-              to="/login"
             />
           </div>
         </q-form>
@@ -65,33 +56,54 @@ import ApiService from "../../service/ApiService";
 import registration from "../../components/domains/registration";
 
 export default defineComponent({
-  name: "App",
+  name: "SignUp",
   setup() {
     const name = ref("");
     const email = ref("");
     const password = ref("");
 
+    // 入力ルール
+    const nameRules = [(val: string) => !!val];
+    const emailRules = [
+      (val: string) => !!val || "メールアドレスは必須です。",
+      (val: string) =>
+        /.+@.+\..+/.test(val) || "正しいメールアドレスを入力してください。",
+    ];
+    const passwordRules = [
+      (val: string) => !!val || "パスワードは必須です。",
+      (val: string) =>
+        val.length > 5 || "パスワードは6文字以上で入力してください。",
+    ];
+
     const submitForm = () => {
-      if (name.value && email.value && password.value) {
-        console.log("会員登録情報:", {
-          name: name.value,
-          email: email.value,
-          password: password.value,
-        });
-        const registration: registration = () => {
-          name;
-          email;
-          password;
-        };
-        // ここでAPI呼び出しなどを行うことができます
-        const response = ApiService.registerUser(registration);
-        console.log(response);
-      } else {
+      if (!name.value && !email.value && !password.value) {
         console.error("入力が不正です");
+        return;
+      }
+
+      const registration: registration = {
+        name: name.value,
+        email: email.value,
+        password: password.value,
+      };
+
+      try {
+        const response = ApiService.registerUser(registration);
+        console.log("ログイン成功：", response);
+      } catch (error) {
+        console.error("ログイン失敗：", error);
       }
     };
 
-    return { name, email, password, submitForm };
+    return {
+      name,
+      email,
+      password,
+      nameRules,
+      emailRules,
+      passwordRules,
+      submitForm,
+    };
   },
 });
 </script>

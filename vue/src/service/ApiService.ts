@@ -14,13 +14,13 @@ export default class ApiService {
 
     // ユーザー登録
     static async registerUser(registration: registration) {
-        const result = await axios.post(`${this.API_BASE_URL}/auth/register`, registration);
-        return result.data;
+        const response = await axios.post(`${this.API_BASE_URL}/auth/signUp`, registration);
+        return response.data;
     }
 
     // ログイン
-    static async loginUser(loginUser: loginUser) {
-        const result = await axios.post(`${this.API_BASE_URL}/auth/login`, loginUser);
-        return result.data;
+    static async login(loginUser: loginUser) {
+        const response = await axios.post(`${this.API_BASE_URL}/auth/login`, loginUser);
+        return response.data;
     }
 }
