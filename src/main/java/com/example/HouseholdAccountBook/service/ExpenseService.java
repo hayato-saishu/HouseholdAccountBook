@@ -1,7 +1,6 @@
 package com.example.HouseholdAccountBook.service;
 
 import com.example.HouseholdAccountBook.dto.Response;
-import com.example.HouseholdAccountBook.entity.Expense;
 
 public interface ExpenseService {
     Response getExpenseByUserIdAndMonth(String userId, String month);
