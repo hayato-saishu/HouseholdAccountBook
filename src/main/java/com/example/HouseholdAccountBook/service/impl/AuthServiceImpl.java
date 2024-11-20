@@ -1,5 +1,6 @@
 package com.example.HouseholdAccountBook.service.impl;
 
+import com.example.HouseholdAccountBook.Exception.OurException;
 import com.example.HouseholdAccountBook.dto.LoginRequest;
 import com.example.HouseholdAccountBook.dto.Response;
 import com.example.HouseholdAccountBook.entity.User;
@@ -44,11 +45,26 @@ public class AuthServiceImpl {
         return response;
     }
 
-    public String login(LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(),
-                loginRequest.getPassword())
-        );
-        return jwtUtils.generateToken(authentication);
+    public Response login(LoginRequest loginRequest) {
+        Response response = new Response();
+
+        try {
+            User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new OurException("ユーザーが見つかりませんでした。"));
+            Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
+                    loginRequest.getEmail(),
+                    loginRequest.getPassword())
+            );
+            response.setStatusCode(200);
+            response.setAccessToken(jwtUtils.generateToken(authentication));
+
+        } catch (OurException e) {
+            response.setStatusCode(404);
+            response.setMessage("ユーザーが見つかりませんでした。");
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("ログイン時にエラーが発生しました。");
+        }
+
+        return response;
     }
 }

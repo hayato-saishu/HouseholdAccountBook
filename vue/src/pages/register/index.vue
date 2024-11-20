@@ -4,6 +4,9 @@
       <q-page>
         <h2>会員登録</h2>
         <q-form @submit.prevent="submitForm" class="q-pa-md">
+          <q-banner v-if="errorMessage" class="q-mt-md bg-red-3 text-negative">
+            {{ errorMessage }}
+          </q-banner>
           <q-input
             class="q-mt-sm"
             v-model="name"
@@ -45,6 +48,7 @@
             />
           </div>
         </q-form>
+        <router-link to="/login">ログイン画面へ</router-link>
       </q-page>
     </q-page-container>
   </q-layout>
@@ -61,6 +65,8 @@ export default defineComponent({
     const name = ref("");
     const email = ref("");
     const password = ref("");
+    const errorMessage = ref("");
+    const isLoading = ref(false);
 
     // 入力ルール
     const nameRules = [(val: string) => !!val];
@@ -75,7 +81,7 @@ export default defineComponent({
         val.length > 5 || "パスワードは6文字以上で入力してください。",
     ];
 
-    const submitForm = () => {
+    const submitForm = async () => {
       if (!name.value && !email.value && !password.value) {
         console.error("入力が不正です");
         return;
@@ -88,10 +94,19 @@ export default defineComponent({
       };
 
       try {
-        const response = ApiService.registerUser(registration);
-        console.log("ログイン成功：", response);
-      } catch (error) {
-        console.error("ログイン失敗：", error);
+        isLoading.value = true;
+        errorMessage.value = "";
+        const response = await ApiService.registerUser(registration);
+        if (response.statusCode === 200) {
+          console.log("会員登録成功：", response);
+        } else if (response.statusCode === 403) {
+          errorMessage.value = response.message;
+        }
+      } catch (error: any) {
+        console.log(error.response);
+        console.error("予期せぬエラー：", error);
+      } finally {
+        isLoading.value = false;
       }
     };
 
@@ -99,6 +114,8 @@ export default defineComponent({
       name,
       email,
       password,
+      errorMessage,
+      isLoading,
       nameRules,
       emailRules,
       passwordRules,

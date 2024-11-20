@@ -49,6 +49,7 @@
 import { defineComponent, ref } from "vue";
 import ApiService from "../../service/ApiService";
 import type LoginUser from "../../components/domains/loginUser";
+import router from "../../router";
 
 export default defineComponent({
   name: "Login",
@@ -83,14 +84,20 @@ export default defineComponent({
       };
 
       try {
+        errorMessage.value = "";
         isLoading.value = true;
-        errorMessage.value = '';
         const response = await ApiService.login(user);
-        console.log("ログイン成功:", response);
-        // セッションにトークンを保存
-        sessionStorage.setItem("token", response.accessToken);
-      } catch (error) {
-        errorMessage.value = "ログインに失敗しました。メールアドレスまたはパスワードを確認してください。";
+        if (response.statusCode === 200) {
+          console.log("ログイン成功:", response);
+          // セッションにトークンを保存
+          localStorage.setItem("token", response.accessToken);
+          router.push("/top");
+        } else if (response.statusCode === 404) {
+          errorMessage.value = response.message;
+        }
+      } catch (error: any) {
+        console.log("エラーメッセージ：", error.response);
+        errorMessage.value = error.response?.data?.message || error.message;
       } finally {
         isLoading.value = false;
       }

@@ -10,6 +10,7 @@ public class Response {
 
     private int statusCode;
     private String message;
+    private String accessToken;
     private UserDto userDto;
     private ExpenseDto expenseDto;
     private CategoryDto categoryDto;

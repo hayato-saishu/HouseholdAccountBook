@@ -1,6 +1,5 @@
 package com.example.HouseholdAccountBook.controller;
 
-import com.example.HouseholdAccountBook.dto.LoginResponseDto;
 import com.example.HouseholdAccountBook.dto.LoginRequest;
 import com.example.HouseholdAccountBook.dto.Response;
 import com.example.HouseholdAccountBook.entity.User;
@@ -20,16 +19,17 @@ public class AuthController {
     private AuthServiceImpl authService;
 
     @PostMapping("/signUp")
-    public Response register(@RequestBody User user) {
-
-        return authService.registerUser(user);
+    public ResponseEntity<Response> register(@RequestBody User user) {
+        // 会員登録を実行
+        Response response = authService.registerUser(user);
+        return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<Response> login(@RequestBody LoginRequest loginRequest) {
         // ログイン処理
-        String token = authService.login(loginRequest);
+        Response response = authService.login(loginRequest);
 
-        return ResponseEntity.ok(new LoginResponseDto(token));
+        return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 }
