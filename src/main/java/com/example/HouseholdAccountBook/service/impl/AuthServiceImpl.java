@@ -39,9 +39,9 @@ public class AuthServiceImpl implements AuthService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         MapperToDto mapperToDto = new MapperToDto();
+        response.setUserDto(mapperToDto.mapperToUserDto(user));
         response.setStatusCode(200);
         response.setMessage("アカウントを作成しました。");
-        response.setUserDto(mapperToDto.mapperToUserDto(user));
 
         return response;
     }
@@ -55,6 +55,8 @@ public class AuthServiceImpl implements AuthService {
                     loginRequest.getEmail(),
                     loginRequest.getPassword())
             );
+            MapperToDto mapperToDto = new MapperToDto();
+            response.setUserDto(mapperToDto.mapperToUserDto(user));
             response.setStatusCode(200);
             response.setAccessToken(jwtUtils.generateToken(authentication));
 
