@@ -1,9 +1,8 @@
 package com.example.HouseholdAccountBook.dto;
 
-import com.example.HouseholdAccountBook.entity.Category;
-import com.example.HouseholdAccountBook.entity.Expense;
-import com.example.HouseholdAccountBook.entity.User;
 import lombok.Data;
+
+import java.util.List;
 
 @Data
 public class Response {
@@ -14,4 +13,7 @@ public class Response {
     private UserDto userDto;
     private ExpenseDto expenseDto;
     private CategoryDto categoryDto;
+    private List<UserDto> userDtoList;
+    private List<ExpenseDto> expenseDtoList;
+    private List<CategoryDto> categoryDtoList;
 }
