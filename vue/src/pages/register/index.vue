@@ -58,6 +58,7 @@
 import { defineComponent, ref } from "vue";
 import ApiService from "../../service/ApiService";
 import registration from "../../components/domains/registration";
+import router from "../../router";
 
 export default defineComponent({
   name: "SignUp",
@@ -99,6 +100,7 @@ export default defineComponent({
         const response = await ApiService.registerUser(registration);
         if (response.statusCode === 200) {
           console.log("会員登録成功：", response);
+          router.push('/login');
         } else if (response.statusCode === 403) {
           errorMessage.value = response.message;
         }
