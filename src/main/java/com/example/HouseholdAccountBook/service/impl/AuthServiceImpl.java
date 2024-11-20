@@ -5,6 +5,7 @@ import com.example.HouseholdAccountBook.dto.LoginRequest;
 import com.example.HouseholdAccountBook.dto.Response;
 import com.example.HouseholdAccountBook.entity.User;
 import com.example.HouseholdAccountBook.repository.UserRepository;
+import com.example.HouseholdAccountBook.service.AuthService;
 import com.example.HouseholdAccountBook.util.JWTUtils;
 import com.example.HouseholdAccountBook.util.MapperToDto;
 import jakarta.validation.Valid;
@@ -16,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class AuthServiceImpl {
+public class AuthServiceImpl implements AuthService {
 
     @Autowired
     private UserRepository userRepository;
