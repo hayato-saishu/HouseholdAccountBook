@@ -23,24 +23,57 @@ public class ExpenseServiceImpl implements ExpenseService {
             // Dtoに詰め替え
             MapperToDto mapperToDto = new MapperToDto();
             List<ExpenseDto> expenseDtoList = new ArrayList<>();
-            for(Expense expense: expenses) {
-                expenseDtoList.add(mapperToDto.mapperToExpenseDto(expense));
-            }
+            expenses.forEach(expense ->
+                    expenseDtoList.add(mapperToDto.mapperToExpenseDto(expense))
+            );
             response.setStatusCode(200);
             response.setExpenseDtoList(expenseDtoList);
         } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("経費の取得に失敗しました。");
+            e.getStackTrace();
         }
 
         return response;
     }
 
     public Response getExpenseByUserIdAndCategoryId(String userId, String categoryId) {
-        return null;
+        Response response = new Response();
+        try {
+            List<Expense> expenses = expenseRepository.findByUserIdAndCategoryId(userId, categoryId);
+            // Dtoに詰め替え
+            MapperToDto mapperToDto = new MapperToDto();
+            List<ExpenseDto> expenseDtoList = new ArrayList<>();
+            expenses.forEach(expense ->
+                    expenseDtoList.add(mapperToDto.mapperToExpenseDto(expense))
+            );
+            response.setExpenseDtoList(expenseDtoList);
+            response.setStatusCode(200);
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("経費の取得に失敗しました。");
+            e.getStackTrace();
+        }
+        return response;
     }
 
     public Response getByUserIdAndCategoryIdAndMonth(String userId, String categoryId, String month) {
-        return null;
+        Response response = new Response();
+        try {
+            List<Expense> expenses = expenseRepository.findByUserIdAndCategoryIdAndMonth(userId, categoryId, month);
+            // Dtoに詰め替え
+            MapperToDto mapperToDto = new MapperToDto();
+            List<ExpenseDto> expenseDtoList = new ArrayList<>();
+            expenses.forEach(expense ->
+                    expenseDtoList.add(mapperToDto.mapperToExpenseDto(expense))
+            );
+            response.setExpenseDtoList(expenseDtoList);
+            response.setStatusCode(200);
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("経費の取得に失敗しました。");
+            e.getStackTrace();
+        }
+        return response;
     }
 }
