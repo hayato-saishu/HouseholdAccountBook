@@ -78,7 +78,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         return response;
     }
 
-    public Response getByUserIdAndCategoryIdAndMonth(String userId, String categoryId, String month) {
+    public Response getExpenseByUserIdAndCategoryIdAndMonth(String userId, String categoryId, String month) {
         Response response = new Response();
         try {
             List<Expense> expenses = expenseRepository.findByUserIdAndCategoryIdAndMonth(userId, categoryId, month);

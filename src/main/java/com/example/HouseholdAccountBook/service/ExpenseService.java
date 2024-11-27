@@ -6,5 +6,5 @@ public interface ExpenseService {
     Response getExpenseByUserId(String userId);
     Response getExpenseByUserIdAndMonth(String userId, String month);
     Response getExpenseByUserIdAndCategoryId(String userId, String categoryId);
-    Response getByUserIdAndCategoryIdAndMonth(String userId, String categoryId, String month);
+    Response getExpenseByUserIdAndCategoryIdAndMonth(String userId, String categoryId, String month);
 }
