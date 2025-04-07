@@ -19,11 +19,11 @@ public class ExpenseServiceImpl implements ExpenseService {
     public Response getExpenseByUserId(String userId) {
         Response response = new Response();
         try {
-            List<Expense> expenses = expenseRepository.findByUserId(userId);
+            List<Expense> expenseList = expenseRepository.findByUserId(userId);
             // Dtoに詰め替え
             MapperToDto mapperToDto = new MapperToDto();
             List<ExpenseDto> expenseDtoList = new ArrayList<>();
-            expenses.forEach(expense ->
+            expenseList.forEach(expense ->
                     expenseDtoList.add(mapperToDto.mapperToExpenseDto(expense))
             );
             response.setStatusCode(200);

@@ -14,13 +14,6 @@ public class MapperToDto {
     ModelMapper modelMapper;
 
     public UserDto mapperToUserDto(User user) {
-//        UserDto userDto = new UserDto();
-//        userDto.setId(user.getId());
-//        userDto.setName(user.getName());
-//        userDto.setEmail(user.getEmail());
-//        userDto.setPassword(user.getPassword());
-//        userDto.setCreatedAt(user.getCreatedAt());
-//        userDto.setUpdatedAt(user.getUpdatedAt());
         return modelMapper.map(user, UserDto.class);
     }
 
