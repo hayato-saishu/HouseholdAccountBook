@@ -31,6 +31,8 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-security"
 	implementation 'com.auth0:java-jwt:4.4.0'
 	implementation 'org.modelmapper:modelmapper:3.1.1'
+	implementation(platform("org.mongodb:mongodb-driver-bom:5.4.0"))
+	implementation 'org.mongodb:mongodb-driver-sync'
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
