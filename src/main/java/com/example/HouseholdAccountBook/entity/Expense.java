@@ -25,6 +25,7 @@ public class Expense {
     private String userId; // ユーザーID
     private String categoryId; // カテゴリーID
     private String month; // 経費月
+    private String expenseName;
     @NotNull(message = "金額を入力してください。")
     private int amount; // 金額
     private String note; // 備考
