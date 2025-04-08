@@ -7,4 +7,7 @@ public interface ExpenseService {
     Response getExpenseByUserIdAndMonth(String userId, String month);
     Response getExpenseByUserIdAndCategoryId(String userId, String categoryId);
     Response getExpenseByUserIdAndCategoryIdAndMonth(String userId, String categoryId, String month);
+    Response createExpense(String userId, String categoryId, String month, String expenseName, String amount);
+    void updateExpense(String expenseId, String categoryId, String month, String expenseName, String amount);
+    void deleteExpense(String expenseId);
 }

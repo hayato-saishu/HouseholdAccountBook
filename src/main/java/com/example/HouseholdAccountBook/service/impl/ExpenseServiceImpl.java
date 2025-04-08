@@ -6,12 +6,14 @@ import com.example.HouseholdAccountBook.entity.Expense;
 import com.example.HouseholdAccountBook.repository.ExpenseRepository;
 import com.example.HouseholdAccountBook.service.ExpenseService;
 import com.example.HouseholdAccountBook.util.MapperToDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Service
 public class ExpenseServiceImpl implements ExpenseService {
 
@@ -33,7 +35,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("経費の取得に失敗しました。");
-            e.getStackTrace();
+            log.warn("getExpenseByUserId error: {}", e.getMessage());
         }
 
         return response;
@@ -54,7 +56,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("経費の取得に失敗しました。");
-            e.getStackTrace();
+            log.warn("getExpenseByUserIdAndMonth error: {}", e.getMessage());
         }
 
         return response;
@@ -75,7 +77,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("経費の取得に失敗しました。");
-            e.getStackTrace();
+            log.warn("getExpenseByUserIdAndCategoryId error: {}", e.getMessage());
         }
         return response;
     }
@@ -95,8 +97,81 @@ public class ExpenseServiceImpl implements ExpenseService {
         } catch (Exception e) {
             response.setStatusCode(500);
             response.setMessage("経費の取得に失敗しました。");
-            e.getStackTrace();
+            log.warn("getExpenseByUserIdAndCategoryIdAndMonth error: {}", e.getMessage());
         }
         return response;
+    }
+
+    public Response createExpense(String userId, String categoryId, String month, String expenseName, String amount) {
+        Response response = new Response();
+        try {
+            // Create Expense object
+            Expense expense = Expense.builder()
+                    .userId(userId)
+                    .categoryId(categoryId)
+                    .month(month)
+                    .expenseName(expenseName)
+                    .amount(Integer.parseInt(amount))
+                    .build();
+
+            // Save expense
+            expenseRepository.save(expense);
+
+            // Set success response
+            response.setStatusCode(200);
+            response.setMessage("経費が正常に保存されました。");
+        } catch (Exception e) {
+            // Set error response
+            response.setStatusCode(500);
+            response.setMessage("経費の保存に失敗しました。");
+            log.warn("createExpense error: {}", e.getMessage());
+        }
+        return response;
+    }
+
+    public void updateExpense(String expenseId, String categoryId, String month, String expenseName, String amount) {
+        Response response = new Response();
+        try {
+            // Find the expense by expenseId
+            Expense expense = expenseRepository.findById(expenseId).orElse(null);
+
+            // If expense does not exist, return error response
+            if (expense == null) {
+                response.setStatusCode(404);
+                response.setMessage("経費が見つかりませんでした。");
+                return;
+            }
+
+            // Update fields
+            expense.setCategoryId(categoryId);
+            expense.setMonth(month);
+            expense.setExpenseName(expenseName);
+            expense.setAmount(Integer.parseInt(amount));
+
+            // Save updated expense
+            expenseRepository.save(expense);
+
+            // Set success response
+            response.setStatusCode(200);
+            response.setMessage("経費が正常に更新されました。");
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("経費の更新に失敗しました。");
+            log.warn("updateExpense error: {}", e.getMessage());
+        }
+    }
+
+    public void deleteExpense(String expenseId) {
+        Response response = new Response();
+        try {
+            // Delete the expense by id
+            expenseRepository.deleteById(expenseId);
+            response.setStatusCode(200);
+            response.setMessage("経費が正常に削除されました。");
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("経費の削除に失敗しました。");
+            log.warn("deleteExpense error: {}", e.getMessage());
+        }
     }
 }

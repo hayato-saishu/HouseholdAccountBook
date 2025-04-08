@@ -31,4 +31,18 @@ public class ExpenseController {
     public Response getExpenseByUserIdAndCategoryIdAndMonth(@PathVariable String userId, @RequestParam String month, @RequestParam String categoryId) {
         return expenseService.getExpenseByUserIdAndCategoryIdAndMonth(userId, categoryId, month);
     }
+
+    @PostMapping("/create-expense/{userId}")
+    public Response createExpense(@PathVariable String userId, @RequestParam String categoryId, @RequestParam String month, @RequestParam String expenseName, @RequestParam String amount) {
+        return expenseService.createExpense(userId, categoryId, month, expenseName, amount);
+    }
+    @PutMapping("/update-expense/{expenseId}")
+    public void updateExpense(@PathVariable String expenseId, @RequestParam String categoryId, @RequestParam String month, @RequestParam String expenseName, @RequestParam String amount) {
+        expenseService.updateExpense(expenseId, categoryId, month, expenseName, amount);
+    }
+
+    @DeleteMapping("/delete-expense/{expenseId}")
+    public void deleteExpense(@PathVariable String expenseId) {
+        expenseService.deleteExpense(expenseId);
+    }
 }
