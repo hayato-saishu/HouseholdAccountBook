@@ -18,6 +18,14 @@ public class AuthController {
     @Autowired
     private AuthServiceImpl authService;
 
+    /**
+     * Registers a new user in the system.
+     * The method processes the provided user object and attempts to create a new account.
+     * Returns a response indicating the success or failure of the operation.
+     *
+     * @param user the user object containing the details needed for registration, including name, email, and password
+     * @return a ResponseEntity containing a Response object with the status code and message of the registration process
+     */
     @PostMapping("/signUp")
     public ResponseEntity<Response> register(@RequestBody User user) {
         // 会員登録を実行
@@ -25,6 +33,14 @@ public class AuthController {
         return ResponseEntity.status(response.getStatusCode()).body(response);
     }
 
+    /**
+     * Authenticates a user based on the provided login details.
+     * The method processes the login request, validates the user credentials,
+     * and returns a response with the status of the operation, including an access token if successful.
+     *
+     * @param loginRequest the LoginRequest object containing the user's email and password for authentication
+     * @return a ResponseEntity containing a Response object with the authentication result, status code, and additional details such as access token or error message
+     */
     @PostMapping("/login")
     public ResponseEntity<Response> login(@RequestBody LoginRequest loginRequest) {
         // ログイン処理

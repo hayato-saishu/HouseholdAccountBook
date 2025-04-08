@@ -15,6 +15,14 @@ public class UserController {
     @Autowired
     UserServiceImpl userService;
 
+    /**
+     * Retrieves user information based on the provided token.
+     * The method validates the token, extracts the user's email,
+     * and fetches the associated user details from the database.
+     *
+     * @param token the authentication token used to identify the user
+     * @return a Response object containing the user's details or an error message
+     */
     @GetMapping("/by-token")
     public Response getUserByToken(@RequestParam String token) {
         return userService.getUserByToken(token);
