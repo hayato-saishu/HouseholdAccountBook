@@ -8,7 +8,9 @@ import com.example.HouseholdAccountBook.service.UserService;
 import com.example.HouseholdAccountBook.util.JWTUtils;
 import com.example.HouseholdAccountBook.util.MapperToDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     @Autowired

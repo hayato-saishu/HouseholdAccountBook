@@ -7,10 +7,12 @@ import com.example.HouseholdAccountBook.repository.ExpenseRepository;
 import com.example.HouseholdAccountBook.service.ExpenseService;
 import com.example.HouseholdAccountBook.util.MapperToDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Service
 public class ExpenseServiceImpl implements ExpenseService {
 
     @Autowired
