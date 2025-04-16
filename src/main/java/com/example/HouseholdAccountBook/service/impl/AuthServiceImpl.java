@@ -38,6 +38,14 @@ public class AuthServiceImpl implements AuthService {
         }
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
+        try {
+            userRepository.save(user);
+        } catch (Exception e) {
+            response.setStatusCode(500);
+            response.setMessage("ユーザーの登録に失敗しました");
+            return response;
+        }
+
         response.setStatusCode(200);
         response.setMessage("アカウントを作成しました。");
 
