@@ -3,7 +3,7 @@ import registration from '../components/domains/registration'
 import loginUser from '../components/domains/loginUser'
 
 export default class ApiService {
-  static API_BASE_URL: string = 'http://localhost:8080/api'
+  static API_BASE_URL: string = import.meta.env.VITE_API_BASE_URL;
 
   static getHeader() {
     return {
