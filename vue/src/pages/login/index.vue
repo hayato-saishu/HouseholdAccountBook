@@ -10,7 +10,6 @@
           <q-input
             class="q-mt-sm"
             v-model="email"
-            dark
             label="メールアドレス"
             type="email"
             :rules="emailRules"
@@ -20,7 +19,6 @@
           <q-input
             class="q-mt-sm"
             v-model="password"
-            dark
             label="パスワード"
             type="password"
             :rules="passwordRules"
@@ -91,7 +89,7 @@ export default defineComponent({
           console.log("ログイン成功:", response);
           // セッションにトークンを保存
           localStorage.setItem("token", response.accessToken);
-          router.push("/top");
+          router.push("/expenseManager");
         } else if (response.statusCode === 404) {
           errorMessage.value = response.message;
         }

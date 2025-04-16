@@ -10,7 +10,6 @@
           <q-input
             class="q-mt-sm"
             v-model="name"
-            dark
             label="名前"
             type="text"
             :rules="nameRules"
@@ -21,7 +20,6 @@
           <q-input
             class="q-mt-sm"
             v-model="email"
-            dark
             label="メールアドレス"
             type="email"
             :rules="emailRules"
@@ -31,7 +29,6 @@
           <q-input
             class="q-mt-sm"
             v-model="password"
-            dark
             label="パスワード"
             type="password"
             :rules="passwordRules"
