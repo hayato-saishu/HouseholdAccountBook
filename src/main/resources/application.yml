@@ -1,22 +1,47 @@
 spring:
+  profiles:
+    active: local
+
+  # 静的リソースの場所
   resources:
     static-locations: classpath:/static/
 
+  # LOGレベルの設定
+  logging:
+    level:
+      org.springframework.security: INFO
+
+  # サーバーポート
+  server:
+    port: 8080
+
+# ===================================================================
+# Profile-specific settings for 'local'
+# ===================================================================
+--- # プロファイル区切り
+spring:
+  config:
+    activate:
+      on-profile: local
   data:
     mongodb:
       host: localhost
       port: 27017
-      username: root
-      password: password
+      username: ${MONGO_LOCAL_USERNAME:root}
+      password: ${MONGO_LOCAL_PASSWORD}
       database: HouseholdAccountBookDB
       authentication-database: admin
       auto-index-creation: true
 
-  # LOGレベルの設定（開発後はINFOに変更）
-  logging:
-    level:
-      org.springframework.security: DEBUG
-
-  # その他の設定
-  server:
-    port: 8080
+# ===================================================================
+# Profile-specific settings for 'prod'
+# ===================================================================
+--- # プロファイル区切り
+spring:
+  config:
+    activate:
+      on-profile: prod
+  data:
+    mongodb:
+      uri: ${SPRING_DATA_MONGODB_URI}
+      auto-index-creation: false
