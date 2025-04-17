@@ -15,9 +15,6 @@ export default defineConfig({
       sassVariables: "./src/quasar-variables.sass",
     })
   ],
-  build: {
-    outDir: "../src/main/resources/static",
-  },
   server: {
     port: 5173,
     strictPort: true

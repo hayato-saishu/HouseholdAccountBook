@@ -45,7 +45,3 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
-
-tasks.named('processResources') {
-	dependsOn(":vue:npm_run_build")
-}
