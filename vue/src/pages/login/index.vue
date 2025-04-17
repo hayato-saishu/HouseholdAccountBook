@@ -56,9 +56,6 @@ export default defineComponent({
     const password = ref("");
     const errorMessage = ref("");
     const isLoading = ref(false);
-    // main.ts や App.vue など、アプリの早い段階で実行される場所に追加
-    console.log('Current Mode:', import.meta.env.MODE);
-    console.log('VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
 
     // 入力ルール
     const emailRules = [
