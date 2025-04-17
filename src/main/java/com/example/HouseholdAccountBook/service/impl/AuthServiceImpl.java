@@ -1,7 +1,6 @@
 package com.example.HouseholdAccountBook.service.impl;
 
 import com.example.HouseholdAccountBook.Exception.DataNotFoundException;
-import com.example.HouseholdAccountBook.Exception.OurException;
 import com.example.HouseholdAccountBook.dto.LoginRequest;
 import com.example.HouseholdAccountBook.dto.Response;
 import com.example.HouseholdAccountBook.entity.User;
