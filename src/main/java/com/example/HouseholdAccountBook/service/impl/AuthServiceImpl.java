@@ -1,5 +1,6 @@
 package com.example.HouseholdAccountBook.service.impl;
 
+import com.example.HouseholdAccountBook.Exception.DataNotFoundException;
 import com.example.HouseholdAccountBook.Exception.OurException;
 import com.example.HouseholdAccountBook.dto.LoginRequest;
 import com.example.HouseholdAccountBook.dto.Response;
@@ -55,7 +56,7 @@ public class AuthServiceImpl implements AuthService {
         Response response = new Response();
 
         try {
-            User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new OurException("ユーザーが見つかりませんでした。"));
+            User user = userRepository.findByEmail(loginRequest.getEmail()).orElseThrow(() -> new DataNotFoundException("ユーザーが見つかりませんでした。"));
             Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     loginRequest.getEmail(),
                     loginRequest.getPassword())
@@ -63,8 +64,8 @@ public class AuthServiceImpl implements AuthService {
             response.setStatusCode(200);
             response.setAccessToken(jwtUtils.generateToken(authentication));
 
-        } catch (OurException e) {
-            response.setStatusCode(404);
+        } catch (DataNotFoundException ex) {
+            response.setStatusCode(ex.getStatusCode());
             response.setMessage("ユーザーが見つかりませんでした。");
         } catch (Exception e) {
             response.setStatusCode(500);
