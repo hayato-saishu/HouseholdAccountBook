@@ -5,7 +5,7 @@
         <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
 
         <q-toolbar-title align="center">
-          家計簿アプリ（試作品）
+          家計簿アプリ
         </q-toolbar-title>
       </q-toolbar>
     </q-header>
