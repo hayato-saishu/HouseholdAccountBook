@@ -7,7 +7,6 @@ import com.example.HouseholdAccountBook.entity.User;
 import com.example.HouseholdAccountBook.repository.UserRepository;
 import com.example.HouseholdAccountBook.service.AuthService;
 import com.example.HouseholdAccountBook.util.JWTUtils;
-import com.example.HouseholdAccountBook.util.MapperToDto;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
