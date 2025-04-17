@@ -33,6 +33,9 @@ spring:
       authentication-database: admin
       auto-index-creation: true
 
+cors:
+  allowed-origins: http://localhost:5173
+
 # ===================================================================
 # Profile-specific settings for 'prod'
 # ===================================================================
@@ -45,3 +48,6 @@ spring:
     mongodb:
       uri: ${SPRING_DATA_MONGODB_URI}
       auto-index-creation: false
+
+cors:
+  allowed-origins: https://dmlabyxtotr1t.cloudfront.net
